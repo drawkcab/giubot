@@ -3,6 +3,7 @@ require 'httparty'
 require 'json'
 
 post '/gateway' do
+  puts params[:text]
   message = params[:text].gsub(params[:trigger_word], '').strip
 
   action, repo = message.split('_').map {|c| c.strip.downcase }
@@ -11,8 +12,8 @@ post '/gateway' do
   case action
     when 'issues'
       resp = HTTParty.get(repo_url)
-      resp = JSON.parse resp.body
-      respond_message "There are #{resp['open_issues_count']} open issues on #{repo}"
+      resp = JSON.parse(resp.body)
+      respond_message "There are #{resp['open_issues']} open issues on #{repo}"
   end
 end
 
